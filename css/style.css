@@ -1,0 +1,66 @@
+.md-toolbar-tools h1 {
+  font-size: inherit;
+  font-weight: inherit;
+  margin: inherit;
+}
+
+md-sidenav.md-locked-open {
+  width: 150px !important;
+  min-width: 150px !important;
+  max-width: 150px !important;
+}
+md-input-container.md-input-invalid > md-icon.key {
+  color:red;
+}
+.view-animate-container {
+  position:relative;
+}
+
+.view-animate {
+  padding:10px;
+}
+
+.view-animate.ng-enter, .view-animate.ng-leave {
+  /*transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s;*/
+  display:block;
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  padding:10px;
+}
+/*
+.view-animate.ng-enter {
+  transform: translateX(-100%);
+}
+.view-animate.ng-enter.ng-enter-active {
+  transform: translateX(0);
+}
+.view-animate.ng-leave.ng-leave-active {
+  transform: translateX(100%);
+}*/
+.no-padding{
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+.posfixed{
+  position: fixed !important;
+}
+:focus{
+  outline: none;
+}
+md-input-container.md-has-icon.no-sidepadding {
+    padding-left: 0;
+    padding-right: 0;
+}
+.icon-rechts{
+  left:auto !important;
+  right: 2px!important;
+}
+.pre{
+  white-space: pre;
+}
+.md-menu {
+  margin-right: -10px;s
+}

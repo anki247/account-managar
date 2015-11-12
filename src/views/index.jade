@@ -1,0 +1,130 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='x-ua-compatible', content='ie=edge')
+    meta(name='robots', content='noindex, nofollow')
+    meta(name='viewport', content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no')
+    link(rel='icon', href='logo.png')
+    link(rel='manifest', href='manifest.json')
+    meta(name='mobile-web-app-capable', content='yes')
+    meta(name='application-name', content='Account Manager')
+    meta(name='mobile-web-app-title', content='Account Manager')
+    meta(name='theme-color', content='#546e7a')
+    meta(name='apple-mobile-web-app-status-bar-style', content='#546e7a')
+    title Account Manager
+    link(rel='stylesheet' href='bower_components/angular-material/angular-material.min.css')
+    link(rel='stylesheet' href='bower_components/material-design-icons/iconfont/material-icons.css')
+    link(rel='stylesheet' href='css/style.css')
+    
+  body.md-body-1(layout='column', ng-controller='mainController as mc', ng-cloak)
+    include ./toolbar.jade
+    include ./content.jade
+    
+    script(type='text/javascript' data-main='js/main' src='bower_components/requirejs/require.js')
+    
+    //-login
+    script(type='text/ng-template' id='login.html')
+      #loginSection
+        md-content.md-padding
+          md-card
+            form(name='loginForm', ng-submit='enter()', autocomplete='off', novalidate='')
+              md-card-title.no-padding
+                md-card-title-text
+                  p Please enter your masterkey
+              md-card-content.no-padding
+                md-input-container.md-block.no-sidepadding
+                  span
+                    label Masterkey
+                    //-md-icon.key(md-font-set='material-icons') vpn_key
+                    input(required='', name='masterkey', ng-model='masterkey', ng-attr-type='{{hide ? "password" : "text"}}', minlength="5")
+                    div(ng-messages='loginForm.masterkey.$error')
+                      div(ng-message='required') This is required.
+                      div(ng-message='minlength') The masterkey has to be more than 5 characters long.
+                  md-icon.icon-rechts(md-font-set='material-icons', ng-click='hide=!hide', ng-init='hide=true') {{hide ? 'visibility_off' : 'visibility'}}      
+              md-card-actions(layout='row', layout-align='end center')
+                md-button.md-accent(type='submit') Enter
+    //-keyList
+    script(type='text/ng-template' id='keyList.html')
+      md-list(ng-cloak='')
+        md-subheader.md-no-sticky Passwords:
+        md-list-item(ng-repeat='(key, obj) in keySet track by $index' ng-click='goToKey(key, obj, $event)')
+          p {{key}}
+          md-menu
+            md-button.md-icon-button(aria-label='Open demo menu', ng-click='$mdOpenMenu($event)')
+              md-icon(md-font-set='material-icons') more_vert            
+            md-menu-content(width='3')
+              md-menu-item(ng-repeat='item in [{img: "mode_edit", label: "edit"}, {img: "delete", label: "Delete"}]')
+                md-button(ng-click='optionClick($event, $index, key, obj)')
+                  md-icon(md-font-set='material-icons') {{item.img}}
+                  | {{item.label}}
+          md-divider(ng-if='!$last')
+          //-md-checkbox.md-secondary(ng-model='key.selected')
+      div(layout='row')
+        md-button.md-primary.md-fab.md-fab-bottom-right.posfixed(ng-click='addNew($event)')
+          md-icon(md-font-set='material-icons', aria-label='add ney key') add
+          
+    //-newKeyDialog
+    script(type='text/ng-template' id='newKeyDialog.html')  
+      md-dialog(aria-label='new Element', ng-cloak='', flex-gt-sm="60")
+        form(name='keyForm', autocomplete='off', ng-submit='save()')
+          md-toolbar
+            .md-toolbar-tools
+              h2 create new key
+              span(flex='')
+              md-button.md-icon-button(ng-click='cancel()')
+                md-icon(md-font-set='material-icons', aria-label='Close dialog') close
+          md-dialog-content
+            .md-dialog-content
+                md-input-container.md-block
+                  label Type 
+                  md-select(ng-model='keyObj.type', name='type')
+                    md-option(ng-repeat='(index, t) in [{type: 1, label: "Account"}, {type: 2, label: "Text"}]', value='{{t.type}}') {{t.label}}
+                  div(ng-messages='keyForm.type.$error')
+                    div(ng-message='required') This is required.
+                md-input-container.md-block
+                  label Title
+                  input(required='', name='title', ng-model='keyObj.title')
+                  div(ng-messages='keyForm.title.$error')
+                    div(ng-message='required') This is required.
+                //-Account
+                div(ng-show='keyObj.type==1')
+                  md-input-container.md-block
+                    label Username
+                    input(ng-required='keyObj.type==1', name='username', ng-model='keyObj.user')
+                    div(ng-messages='keyForm.username.$error')
+                      div(ng-message='required') This is required.
+                  md-input-container.md-block.no-sidepadding
+                    span
+                      label Password
+                      input(ng-required='keyObj.type==1', name='password', ng-model='keyObj.pass', ng-attr-type='{{hide ? "password" : "text"}}')
+                      div(ng-messages='keyForm.password.$error')
+                        div(ng-message='required') This is required.
+                    md-icon.icon-rechts(md-font-set='material-icons', ng-click='hide=!hide', ng-init='hide=true') {{hide ? 'visibility_off' : 'visibility'}}
+                //-text
+                div(ng-show='keyObj.type==2')
+                    md-input-container.md-block
+                      label Text
+                      textarea(ng-required='keyObj.type==2', name='text', ng-model='keyObj.text', columns='1', md-maxlength='300', rows='5')
+                      div(ng-messages='keyForm.text.$error')
+                        div(ng-message='required') This is required.
+                
+          md-dialog-actions(layout='row')
+              md-button.md-accent(type='submit') Save
+    //-Show Key          
+    script(type='text/ng-template' id='showKeyDialog.html')        
+      md-dialog(aria-label='new Element', ng-cloak='')
+        md-toolbar
+          .md-toolbar-tools
+            h2 {{keyObjDis.title}}
+            span(flex='')
+            md-button.md-icon-button(ng-click='cancel()')
+              md-icon(md-font-set='material-icons', aria-label='Close dialog') close
+        md-dialog-content
+          .md-dialog-content(ng-show='keyObjDis.type==1')
+            p Username: {{keyObjDis.user}}
+            p Password: {{keyObjDis.pass}}
+          .md-dialog-content(ng-show='keyObjDis.type==2')
+            p.pre {{keyObjDis.text}}
+        md-dialog-actions(layout='row')
+          md-button.md-accent(ng-click='cancel()') Close

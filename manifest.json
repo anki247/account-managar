@@ -1,0 +1,11 @@
+{
+  "short_name": "Account Manager",
+  "name": "Account Manager",
+  "icons": [
+    {
+      "src": "logo.png",
+      "sizes": "350x350"
+    }
+  ],
+  "display": "standalone"
+}

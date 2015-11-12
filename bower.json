@@ -1,0 +1,26 @@
+{
+  "name": "Account Manager",
+  "version": "0.0.0",
+  "authors": [
+    "Anki"
+  ],
+  "description": "Account Manager",
+  "keywords": [
+    "AES",
+    "Account"
+  ],
+  "license": "",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components"
+  ],
+  "dependencies": {
+    "requirejs": "~2.1.20",
+    "angular-material": "~1.0.x",
+    "angular-route": "~1.4.7",
+    "angular-messages": "~1.4.8",
+    "material-design-icons": "~2.2.3"
+  }
+}
