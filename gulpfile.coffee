@@ -4,12 +4,19 @@ webserver     = require 'gulp-webserver'
 runSequence   = require 'run-sequence'
 jade          = require 'gulp-jade'
 uglify        = require 'gulp-uglify'
+del           = require 'del'
 
 gulp.task 'templates', () ->
   gulp.src './src/views/**/*.jade'
     .pipe jade
       locals: {}
     .pipe gulp.dest('./')
+
+gulp.task 'del:jade', () ->
+  del [
+    './*.html'
+    '!./index.html'
+  ]
 
 gulp.task 'coffee', () ->
   gulp.src './src/**/*.coffee'
@@ -29,6 +36,6 @@ gulp.task 'webserver', () ->
       open: 'index.html'
 
 gulp.task 'default', (callback) ->
-  runSequence 'templates', 'coffee', 'webserver', callback
-  gulp.watch './src/views/**/*.jade', ['templates']
+  runSequence 'templates', 'del:jade', 'coffee', 'webserver', callback
+  gulp.watch './src/views/**/*.jade', ['templates', 'del:jade']
   gulp.watch './src/**/*.coffee', ['coffee']

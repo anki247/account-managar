@@ -19,6 +19,8 @@
   },
   "devDependencies": {
     "amd-optimize": "0.x",
+    "del": "^2.2.0",
+    "gulp": "^3.9.1",
     "gulp-concat": "2.x",
     "gulp-uglify": "1.x"
   }

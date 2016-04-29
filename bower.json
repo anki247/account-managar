@@ -1,9 +1,7 @@
 {
-  "name": "Account Manager",
-  "version": "0.0.0",
-  "authors": [
-    "Anki"
-  ],
+  "name": "account-manager",
+  "version": "0.1.0",
+  "author": "Anki",
   "description": "Account Manager",
   "keywords": [
     "AES",
@@ -20,7 +18,6 @@
     "requirejs": "~2.1.20",
     "angular-material": "~1.0.x",
     "angular-route": "~1.4.7",
-    "angular-messages": "~1.4.8",
-    "material-design-icons": "~2.2.3"
+    "angular-messages": "~1.4.8"
   }
 }
