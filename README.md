@@ -1,4 +1,4 @@
-# account-managar
+# account-manager
 
 Demo
-http://anki247.github.io/account-managar/
+http://anki247.github.io/account-manager/
