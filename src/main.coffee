@@ -1,12 +1,13 @@
 requirejs.config
   paths:
     cryptoJS: '../js/lib/aes'
-    angular: '../bower_components/angular/angular.min'
-    ngAnimate: '../bower_components/angular-animate/angular-animate.min'
-    ngAria: '../bower_components/angular-aria/angular-aria.min'
-    ngMaterial: '../bower_components/angular-material/angular-material.min'
-    ngRoute: '../bower_components/angular-route/angular-route.min'
-    ngMessages: '../bower_components/angular-messages/angular-messages.min'
+    angular: 'https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.8/angular.min'
+    ngAnimate: 'https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.8/angular-animate.min'
+    ngAria: 'https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.8/angular-aria.min'
+    ngMaterial: 'https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.0.1/angular-material.min'
+    ngRoute: 'https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.7/angular-route.min'
+    ngMessages: 'https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.8/angular-messages.min'
+
   shim:
     aesManager: ['cryptoJS']
     ngAnimate: ['angular']

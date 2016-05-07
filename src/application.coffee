@@ -1,4 +1,5 @@
-define ['keyManager','mainCtrl', 'loginCtrl', 'listCtrl', 'ngMaterial', 'ngRoute', 'ngAnimate', 'ngMessages'], (KeyManager, MainCtrl, LoginCtrl, ListCtrl) ->
+define ['keyManager', 'toastManager' ,'mainCtrl', 'loginCtrl', 'listCtrl', 'ngMaterial', 'ngRoute', 'ngAnimate', 'ngMessages'],
+(KeyManager, ToastManager, MainCtrl, LoginCtrl, ListCtrl) ->
   #Module
   class Application
     constructor: () ->
@@ -45,36 +46,31 @@ define ['keyManager','mainCtrl', 'loginCtrl', 'listCtrl', 'ngMaterial', 'ngRoute
         return
       ]
       #Factory
-      app.factory 'keyManager', ['$mdToast', ($mdToast) ->
+      app.factory 'toastManager', ['$mdToast', ($mdToast) ->
+        unless toastManager
+          toastManager = new ToastManager($mdToast)
+        toastManager
+      ]
+
+      app.factory 'keyManager', ['toastManager', (toastManager) ->
         unless keyManager
-          keyManager = new KeyManager($mdToast)
+          keyManager = new KeyManager(toastManager)
         keyManager
       ]
+
+      app.directive 'customOnChange', ->
+        {
+          restrict: 'A'
+          link: (scope, element, attrs) ->
+            onChangeHandler = scope.$eval(attrs.customOnChange)
+            element.bind 'change', onChangeHandler
+            return
+
+        }
+
 
       new MainCtrl app
       new LoginCtrl app
       new ListCtrl app
-
-      ###dummy controller
-      test = new TestCtrl()
-      console.log '-------------------'
-      console.log test
-      console.log test.a
-      console.log test.b
-      console.log test.getb()
-      console.log test.getbb()
-      console.log '-------------------'
-      console.log test.getc()
-      console.log test.getd()
-      ###
-
-
-
-
-
-
-
-
-
 
       return

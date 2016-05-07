@@ -5,8 +5,6 @@ define [], () ->
 
     constructor: (app) ->
       app.controller 'listCtrl', ['$scope', '$mdDialog','$mdMedia','keyManager', ($scope, $mdDialog, $mdMedia, keyManager) ->
-        console.log 'jz'
-        console.log keyManager.keyObj
         $scope.keySet = keyManager.keyObj
 
         $scope.goToKey = (key, data, ev) ->
@@ -79,7 +77,6 @@ define [], () ->
 
       #newKeyDialog
       newKeyDialogCtrl = ['$scope', '$mdDialog','keyObj', ($scope, $mdDialog, keyObj) ->
-        console.log keyObj
         $scope.keyObj = keyObj || {type:1}
 
         $scope.cancel = ->

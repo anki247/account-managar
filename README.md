@@ -1,4 +1,4 @@
 # account-manager
 
 Demo
-http://anki247.github.io/account-manager/
+https://anki247.github.io/account-manager/

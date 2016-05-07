@@ -13,7 +13,7 @@ html
     meta(name='theme-color', content='#546e7a')
     meta(name='apple-mobile-web-app-status-bar-style', content='#546e7a')
     title Account Manager
-    link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic')
+    //link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic')
     link(rel='stylesheet' href='https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css')
     link(rel='stylesheet' href='https://fonts.googleapis.com/icon?family=Material+Icons')
     link(rel='stylesheet' href='css/style.css')
@@ -22,7 +22,7 @@ html
     include ./toolbar.jade
     include ./content.jade
     
-    script(type='text/javascript' data-main='js/main' src='bower_components/requirejs/require.js')
+    script(type='text/javascript' data-main='js/main' src='https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.20/require.min.js')
     
     //-login
     script(type='text/ng-template' id='login.html')
@@ -48,7 +48,7 @@ html
     //-keyList
     script(type='text/ng-template' id='keyList.html')
       md-list(ng-cloak='')
-        md-subheader.md-no-sticky Passwords:
+        md-subheader.md-no-sticky Items
         md-list-item(ng-repeat='(key, obj) in keySet track by $index' ng-click='goToKey(key, obj, $event)')
           p {{key}}
           md-menu

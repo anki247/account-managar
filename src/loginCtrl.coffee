@@ -3,7 +3,6 @@ define [], () ->
     constructor: (app) ->
       app.controller 'loginCtrl', ['$scope', '$location', '$rootScope', 'keyManager', ($scope, $location, $rootScope, keyManager) ->
         #Navigation stop
-        console.log 'hier'
         $rootScope.preventNavigation = false
         $rootScope.$on '$locationChangeStart', (event, newUrl, oldUrl) ->
           if $rootScope.preventNavigation
@@ -17,7 +16,7 @@ define [], () ->
           keyManager.setMasterKey $scope.masterkey
           if document.activeElement
             document.activeElement.blur()
-          
+
           if keyManager.isAuthenticated()
             #login was successful
             $rootScope.logged = true

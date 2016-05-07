@@ -4,14 +4,14 @@ define ['aesManager'], (AesManager) ->
     _masterKey = undefined
     aesManager = undefined
     theBoss = 'theBoss'
-    mdToast = undefined
+    toastManager = undefined
     _key = 'keyObj'
 
     keyObj:  Object.create null
 
-    constructor: ($mdToast) ->
+    constructor: (_toastManager) ->
       aesManager = new AesManager()
-      mdToast = $mdToast
+      toastManager = _toastManager
 
     #public functions
     setMasterKey: (masterKey) =>
@@ -25,20 +25,18 @@ define ['aesManager'], (AesManager) ->
       tmp = typeof _masterKey isnt "undefined" && _masterKey isnt null
       tmp
 
-    toast: (msg) ->
-      mdToast.showSimple msg
-      return
+    encryptKeyObj: () ->
+      aesManager.encrypt _masterKey, JSON.stringify(@keyObj)
 
     # plainKeyObj {title: 'fb', type: int, user: 'max', pass: '123'}
     encryptSave: (plainKeyObj) =>
-      console.log 'hier'
       tmpObj = {}
       if plainKeyObj == null or plainKeyObj.title == undefined or  plainKeyObj.title.length == 0
-        @toast 'no title'
+        toastManager.toast 'no title'
       else
         unless(plainKeyObj.skip)
           if(@keyObj[plainKeyObj.title] != undefined)
-            @toast 'key exists!'
+            toastManager.toast 'title exists!'
             return
         tmpObj.type =  parseInt plainKeyObj.type
         if(tmpObj.type == 1)
@@ -47,7 +45,6 @@ define ['aesManager'], (AesManager) ->
         else
           tmpObj.text = aesManager.encrypt _masterKey + plainKeyObj.title, plainKeyObj.text
         @keyObj[plainKeyObj.title] = tmpObj
-        console.log(@keyObj)
         iSaveKey()
       return
 
@@ -55,33 +52,34 @@ define ['aesManager'], (AesManager) ->
       if(@keyObj.hasOwnProperty title)
         delete @keyObj[title]
         iSaveKey()
-        @toast 'delete ' + title
+        toastManager.toast 'delete #{title}' 
       return
 
-    decrypt: (title, decText) ->
-      aesManager.decrypt _masterKey + title, decText
+    decrypt: (title, encText) ->
+      aesManager.decrypt _masterKey + title, encText
+
+    decryptKeyObj: (encText) ->
+      aesManager.decrypt _masterKey, encText
 
     #private functions
     iCheck = (masterKey) =>
-      #TODO login logic & if is already set
       if masterKey and masterKey isnt '' and masterKey.length > 4
         loginPass = localStorage.getItem theBoss
         if loginPass is null
-          #first loginPass
           console.log 'first login'
           localStorage.setItem theBoss, aesManager.encrypt masterKey, theBoss
-          @::toast 'registered :)'
+          toastManager.toast 'Please notice your masterkey for relogin!'
           true
         else
           #login
           console.log 'login process'
           if theBoss is aesManager.decrypt masterKey, loginPass
             #success
-            @::toast 'hey!'
+            toastManager.toast 'hey!'
             true
           else
             #error
-            @::toast 'jerk'
+            toastManager.toastAction 'Come on dude! wanna reset ur account?', () -> localStorage.clear()
             false
       else false
 
@@ -89,17 +87,14 @@ define ['aesManager'], (AesManager) ->
       _masterKey = masterKey
       return
 
-    #iSaveKey({title: 'fb', type: int, user: 'sgfsfds', pass: 'sdfasfda'})
     iSaveKey = () =>
-      #@::keySet.push keyObj
       localStorage.setItem _key, JSON.stringify @::keyObj
       return
 
     iLoadKeyFromLocalStorage = () =>
       tmpObj = JSON.parse localStorage.getItem _key
       if tmpObj is null
-        console.log 'key war null'
+        console.log 'key was null'
       else
-        console.log 'key wurde ausgelesen'
         @::keyObj = tmpObj
       return
