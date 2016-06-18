@@ -2,7 +2,7 @@ define ['aesManager'], (AesManager) ->
   class MainCtrl
     constructor: (app) ->
       console.log 'init MainCtrl'
-      app.controller 'mainController', ['$scope', '$mdSidenav', 'keyManager', ($scope, $mdSidenav, keyManager) ->
+      app.controller 'mainController', ['$scope', '$mdSidenav', 'keyManager','toastManager', ($scope, $mdSidenav, keyManager, toastManager) ->
         @toggleSidenav = (menuId) ->
           $mdSidenav(menuId).toggle()
           return
@@ -11,12 +11,16 @@ define ['aesManager'], (AesManager) ->
         @export = () ->
           console.log '--> Export'
           keyObj = keyManager.keyObj
-          a = document.createElement('a');
+          a = document.createElement 'a'
           a.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(keyManager.encryptKeyObj()))
           a.setAttribute 'download', 'AM-' + genarateDateStr() + '.am'
           document.body.appendChild a
           a.click()
           document.body.removeChild a
+
+          toastManager.toast 'export'
+          $mdSidenav('right').toggle()
+
           return
 
         @import = () ->
@@ -34,8 +38,10 @@ define ['aesManager'], (AesManager) ->
               #TODO merge keyObj
               mergeKeyObj keyManager.keyObj, importedKeyObj
 
+              keyManager.saveKey()
 
-
+              toastManager.toast 'import'
+              $mdSidenav('right').toggle()
 
           reader.readAsText input.files[0]
           return
@@ -46,9 +52,9 @@ define ['aesManager'], (AesManager) ->
 
         format = (c) ->
           if(c < 10)
-            '0#{c}'
+            '0' + c
           else
-            '#{c}'
+            '' + c
 
         mergeKeyObj = (origKeyObj, importedKeyObj) ->
           console.log 'mergeKeyObj'
@@ -65,6 +71,7 @@ define ['aesManager'], (AesManager) ->
 
               #new key with same title
               origKeyObj[getNextAvailableTile(origKeyObj, title)] = body
+
           return
 
         getNextAvailableTile = (origKeyObj, title) ->
@@ -72,9 +79,10 @@ define ['aesManager'], (AesManager) ->
           exten = '('+i+')'
           while(origKeyObj[title + exten] isnt undefined)
             i++
-            exten += '('+i+')'
+            exten = '('+i+')'
 
           title+exten
+
 
         return
       ]

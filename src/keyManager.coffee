@@ -65,6 +65,9 @@ define ['aesManager'], (AesManager) ->
     decryptKeyObj: (encText) ->
       aesManager.decrypt _masterKey, encText
 
+    saveKey: () ->
+      iSaveKey()
+
     #private functions
     iCheck = (masterKey) =>
       if masterKey and masterKey isnt '' and masterKey.length > 4
