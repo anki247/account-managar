@@ -28,7 +28,7 @@ define ['aesManager'], (AesManager) ->
     encryptKeyObj: () ->
       aesManager.encrypt _masterKey, JSON.stringify(@keyObj)
 
-    # plainKeyObj {title: 'fb', type: int, user: 'max', pass: '123'}
+    # plainKeyObj {title: 'fb', type: int, user: 'max', pass: '123', created: long}
     encryptSave: (plainKeyObj) =>
       tmpObj = {}
       if plainKeyObj == null or plainKeyObj.title == undefined or  plainKeyObj.title.length == 0

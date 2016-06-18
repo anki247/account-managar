@@ -60,16 +60,21 @@ define ['aesManager'], (AesManager) ->
               #key exists
               if origKeyObj[title].type is body.type
                 #same type
-                if origKeyObj[title].type == 1
-                  if origKeyObj[title].created is body.created
-                    continue
-                else
-                  if origKeyObj[title].created is body.created
-                    continue
+                if origKeyObj[title].created is body.created
+                  continue
 
               #new key with same title
-              origKeyObj[title] = body
+              origKeyObj[getNextAvailableTile(origKeyObj, title)] = body
           return
+
+        getNextAvailableTile = (origKeyObj, title) ->
+          i = 1
+          exten = '('+i+')'
+          while(origKeyObj[title + exten] isnt undefined)
+            i++
+            exten += '('+i+')'
+
+          title+exten
 
         return
       ]
