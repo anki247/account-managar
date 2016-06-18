@@ -27,12 +27,15 @@ define [], () ->
             keyObjDis = {}
             keyObjDis.title = key
             keyObjDis.type = data.type
+            keyObjDis.created = data.created
             if(data.type == 1)
-              keyObjDis.user = keyManager.decrypt key, data.user
-              keyObjDis.pass = keyManager.decrypt key, data.pass
+              keyObjDis.user = keyManager.decrypt data.created, data.user
+              keyObjDis.pass = keyManager.decrypt data.created, data.pass
             else
-              keyObjDis.text = keyManager.decrypt key, data.text
+              keyObjDis.text = keyManager.decrypt data.created, data.text
             keyObjDis.skip = true
+            keyObjDis.oldTitle = key
+
             $scope.addNew ev, keyObjDis
           else #delete
             keyManager.deleteSave key
@@ -63,11 +66,12 @@ define [], () ->
         $scope.keyObjDis = {}
         $scope.keyObjDis.title = key
         $scope.keyObjDis.type = data.type
+        $scope.keyObjDis.created = data.created
         if(data.type == 1)
-          $scope.keyObjDis.user = keyManager.decrypt key, data.user
-          $scope.keyObjDis.pass = keyManager.decrypt key, data.pass
+          $scope.keyObjDis.user = keyManager.decrypt data.created, data.user
+          $scope.keyObjDis.pass = keyManager.decrypt data.created, data.pass
         else
-          $scope.keyObjDis.text = keyManager.decrypt key, data.text
+          $scope.keyObjDis.text = keyManager.decrypt data.created, data.text
 
         $scope.cancel = ->
           $mdDialog.cancel()

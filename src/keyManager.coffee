@@ -38,25 +38,29 @@ define ['aesManager'], (AesManager) ->
           if(@keyObj[plainKeyObj.title] != undefined)
             toastManager.toast 'title exists!'
             return
+        if(plainKeyObj.oldTitle and plainKeyObj.title isnt plainKeyObj.oldTitle)
+          iDelete plainKeyObj.oldTitle
+
         tmpObj.type =  parseInt plainKeyObj.type
+        tmpObj.created = new Date().getTime()
         if(tmpObj.type == 1)
-          tmpObj.user = aesManager.encrypt _masterKey + plainKeyObj.title, plainKeyObj.user
-          tmpObj.pass = aesManager.encrypt _masterKey + plainKeyObj.title, plainKeyObj.pass
+          tmpObj.user = aesManager.encrypt _masterKey + tmpObj.created, plainKeyObj.user
+          tmpObj.pass = aesManager.encrypt _masterKey + tmpObj.created, plainKeyObj.pass
         else
-          tmpObj.text = aesManager.encrypt _masterKey + plainKeyObj.title, plainKeyObj.text
+          tmpObj.text = aesManager.encrypt _masterKey + tmpObj.created, plainKeyObj.text
         @keyObj[plainKeyObj.title] = tmpObj
         iSaveKey()
       return
 
-    deleteSave: (title) =>
+    deleteSave: (title ) =>
       if(@keyObj.hasOwnProperty title)
         delete @keyObj[title]
         iSaveKey()
-        toastManager.toast 'delete #{title}' 
+        toastManager.toast 'delete #{title}'
       return
 
-    decrypt: (title, encText) ->
-      aesManager.decrypt _masterKey + title, encText
+    decrypt: (created, encText) ->
+      aesManager.decrypt _masterKey + created, encText
 
     decryptKeyObj: (encText) ->
       aesManager.decrypt _masterKey, encText
@@ -97,4 +101,9 @@ define ['aesManager'], (AesManager) ->
         console.log 'key was null'
       else
         @::keyObj = tmpObj
+      return
+
+    iDelete = (title) =>
+      if(@::keyObj.hasOwnProperty title)
+        delete @::keyObj[title]
       return

@@ -52,7 +52,7 @@ define ['aesManager'], (AesManager) ->
 
         mergeKeyObj = (origKeyObj, importedKeyObj) ->
           console.log 'mergeKeyObj'
-          for title,body of importedKeyObj
+          for title, body of importedKeyObj
             if origKeyObj[title] is undefined
               #new Key
               origKeyObj[title] = body
@@ -61,22 +61,14 @@ define ['aesManager'], (AesManager) ->
               if origKeyObj[title].type is body.type
                 #same type
                 if origKeyObj[title].type == 1
-                  if origKeyObj[title].user is body.user and origKeyObj[title].pass is body.pass
-                    #body is equal
-                    continue
-                  else if keyManager.decrypt title, origKeyObj[title].user is keyManager.decrypt title, body.user and keyManager.decrypt title, origKeyObj[title].pass is keyManager.decrypt title, body.pass
-                    #body resut is equal
+                  if origKeyObj[title].created is body.created
                     continue
                 else
-                  if keyManager.decrypt title, origKeyObj[title].text = keyManager.decrypt title, body.text
-                    #body is equal
+                  if origKeyObj[title].created is body.created
                     continue
-                  else if keyManager.decrypt title, origKeyObj[title].text is keyManager.decrypt title, body.text
-                    #body resut is equal
-                    continue
+
               #new key with same title
-              origKeyObj[title + (new Date).getTime()] = body
-              console.log origKeyObj
+              origKeyObj[title] = body
           return
 
         return

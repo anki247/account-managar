@@ -52,7 +52,7 @@ html
         md-list-item(ng-repeat='(key, obj) in keySet track by $index' ng-click='goToKey(key, obj, $event)')
           p {{key}}
           md-menu
-            md-button.md-icon-button(aria-label='Open demo menu', ng-click='$mdOpenMenu($event)')
+            md-button.md-icon-button(aria-label='Open menu', ng-click='$mdOpenMenu($event)')
               md-icon(md-font-set='material-icons') more_vert            
             md-menu-content(width='3')
               md-menu-item(ng-repeat='item in [{img: "mode_edit", label: "edit"}, {img: "delete", label: "Delete"}]')
