@@ -22,7 +22,15 @@ html
     include ./toolbar.jade
     include ./content.jade
     
-    script(type='text/javascript' data-main='js/main' src='https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.20/require.min.js')
+    script(type='text/javascript' src='js/lib/aes.js')
+    script(type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.8/angular.min.js')
+    script(type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.8/angular-animate.min.js')
+    script(type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.8/angular-aria.min.js')
+    script(type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.0.1/angular-material.min.js')
+    script(type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.7/angular-route.min.js')
+    script(type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.8/angular-messages.min.js')
+
+   
     
     //-login
     script(type='text/ng-template' id='login.html')
@@ -85,20 +93,20 @@ html
                     div(ng-message='required') This is required.
                 md-input-container.md-block
                   label Title
-                  input(required='', name='title', ng-model='keyObj.title')
+                  input.selectable(required='', name='title', ng-model='keyObj.title')
                   div(ng-messages='keyForm.title.$error')
                     div(ng-message='required') This is required.
                 //-Account
                 div(ng-show='keyObj.type==1')
                   md-input-container.md-block
                     label Username
-                    input(ng-required='keyObj.type==1', name='username', ng-model='keyObj.user')
+                    input.selectable(ng-required='keyObj.type==1', name='username', ng-model='keyObj.user')
                     div(ng-messages='keyForm.username.$error')
                       div(ng-message='required') This is required.
                   md-input-container.md-block.no-sidepadding
                     span
                       label Password
-                      input(ng-required='keyObj.type==1', name='password', ng-model='keyObj.pass', ng-attr-type='{{hide ? "password" : "text"}}')
+                      input.selectable(ng-required='keyObj.type==1', name='password', ng-model='keyObj.pass', ng-attr-type='{{hide ? "password" : "text"}}')
                       div(ng-messages='keyForm.password.$error')
                         div(ng-message='required') This is required.
                     md-icon.icon-rechts(md-font-set='material-icons', ng-click='hide=!hide', ng-init='hide=true') {{hide ? 'visibility_off' : 'visibility'}}
@@ -129,3 +137,5 @@ html
             p.pre {{keyObjDis.text}}
         md-dialog-actions(layout='row')
           md-button.md-accent(ng-click='cancel()') Close
+     
+     script(type='text/javascript' src='js/bundle.js')
