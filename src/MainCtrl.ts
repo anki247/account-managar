@@ -1,6 +1,7 @@
+import ToastManager from './ToastManager'
+
 export default class MainCtrl {
   _keyManager
-  _toastManager
   _mdSidenav
 
   constructor(app) {
@@ -9,12 +10,7 @@ export default class MainCtrl {
   }
 
   private start(app) {
-    app.controller('mainController', ['$scope', '$mdSidenav', 'keyManager','toastManager', ($scope, $mdSidenav, keyManager, toastManager) => {
-      /*console.log('--> test')
-      console.log(keyManager)
-      this._keyManager = keyManager
-      this._toastManager = toastManager
-      this._mdSidenav = $mdSidenav*/
+    app.controller('mainController', ['$scope', '$mdSidenav', 'keyManager', ($scope, $mdSidenav, keyManager) => {
 
       $scope.toggleSidenav = (menuId) => {
         $mdSidenav(menuId).toggle()
@@ -22,7 +18,7 @@ export default class MainCtrl {
 
       //download TODO dom anpassen
       $scope.exportKey = () => {
-         this.exportImpl(keyManager, toastManager, $mdSidenav)
+         this.exportImpl(keyManager, $mdSidenav)
       }
        
 
@@ -31,12 +27,12 @@ export default class MainCtrl {
       //uplaoud TODO dom anpassen
       $scope.upload = (event) => {
         console.log('event: ', event)
-        this.uploadImp(event, keyManager, toastManager, $mdSidenav)
+        this.uploadImp(event, keyManager, $mdSidenav)
       }
     }])
   }
 
-  private exportImpl(keyManager, toastManager, mdSidenav) {
+  private exportImpl(keyManager, mdSidenav) {
     console.log('--> Export')
     console.log(keyManager)
     let keyObj = keyManager.keyObj
@@ -47,11 +43,11 @@ export default class MainCtrl {
     a.click()
     document.body.removeChild(a)
 
-    toastManager.toast('export')
+    ToastManager.toast('export')
     mdSidenav('right').toggle()
   }
 
-  private uploadImp(event, keyManager, toastManager, mdSidenav){
+  private uploadImp(event, keyManager, mdSidenav){
     console.log('--> Import')
     let input = event.target
     let reader = new FileReader()
@@ -64,7 +60,7 @@ export default class MainCtrl {
 
       keyManager.saveKey()
 
-      toastManager.toast('import')
+      ToastManager.toast('import')
       mdSidenav('right').toggle()
     }
     reader.readAsText(input.files[0])

@@ -5,16 +5,19 @@ export default class LoginCtrl {
 
   private start(app) {
     app.controller('loginCtrl', ['$scope', '$location', '$rootScope', 'keyManager', ($scope, $location, $rootScope, keyManager) => {
-      //Navigation stop
+      /*Navigation stop (maybe later)
       $rootScope.preventNavigation = false
       $rootScope.$on('$locationChangeStart', (event, newUrl, oldUrl) => {
         if($rootScope.preventNavigation){
           event.preventDefault()
         }
-      })
+      })*/
 
-      $scope.masterkey = 'hallo'
+      //global vars
       $rootScope.logged = false
+      $rootScope.appHeight = window.outerHeight
+
+      $scope.masterkey = ''
 
       //login action
       $scope.enter = () => {

@@ -1,32 +1,34 @@
-export default class ToastManager {
-  mdToast
+import AngularUtil from './AngularUtil'
 
-  constructor(_mdToast) {
+class ToastManager {
+
+  constructor() {
     console.log('toast init')
-    this.mdToast = _mdToast
   }
 
   /**
    * toast
    */
-  public toast(msg) {
-    this.mdToast.showSimple(msg)
+  public toast(msg: string) {
+    AngularUtil.mdToast.showSimple(msg)
   }
 
   /**
    * toastAction
    */
   public toastAction(msg, cb) {
-    let toast = this.mdToast.simple()
+    let toast = AngularUtil.mdToast.simple()
                 .textContent(msg)
                 .action('YES')
                 .highlightAction(true)
                 .hideDelay(0)
                 
-    this.mdToast.show(toast).then((response) => {
-      if(response == 'ok'){
+    AngularUtil.mdToast.show(toast).then((response) => {
+      if(response === 'ok'){
         cb()
       }
     })
   }
 }
+
+export default new ToastManager();

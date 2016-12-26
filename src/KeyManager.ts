@@ -1,17 +1,16 @@
 import AesManager from './AesManager'
+import ToastManager from './ToastManager'
 
 export default function () {
   let _masterKey
   let aesManager
   let theBoss = 'theBoss'
-  let toastManager
   let _key = 'keyObj'
 
   this.keyObj = Object.create(null)
 
-  this.start = (_toastManager) => {
+  this.start = () => {
     this.aesManager = new AesManager()
-    toastManager = _toastManager
   }
 
   this.setMasterKey = (masterKey) => {
@@ -34,11 +33,11 @@ export default function () {
   this.encryptSave = (plainKeyObj:any)  => {
     let tmpObj:any = {}
     if(plainKeyObj == null || plainKeyObj.title == undefined ||  plainKeyObj.title.length == 0){
-      toastManager.toast('no title')
+      ToastManager.toast('no title')
     } else {
       if(!plainKeyObj.skip){
         if(this.keyObj[plainKeyObj.title] != undefined){
-          toastManager.toast('title exists!')
+          ToastManager.toast('title exists!')
           return
         }
       }
@@ -63,7 +62,7 @@ export default function () {
     if(this.keyObj.hasOwnProperty(title)){
       delete this.keyObj[title]
       iSaveKey()
-      toastManager.toast(`delete #{title}`)
+      ToastManager.toast(`delete ${title}`)
     }
   }
 
@@ -85,18 +84,18 @@ export default function () {
       if(loginPass === null) {
         console.log('first login')
         localStorage.setItem(theBoss, this.aesManager.encrypt(masterKey, theBoss))
-        toastManager.toast('Please notice your masterkey for relogin!')
+        ToastManager.toast('Please notice your masterkey for relogin!')
         return true
       } else {
         //login
         console.log('login process')
         if(theBoss === this.aesManager.decrypt(masterKey, loginPass)) {
           //success
-          toastManager.toast('hey!')
+          ToastManager.toast('hey!')
           return true
         } else {
           //error
-          toastManager.toastAction('Come on! Do you want reset your account?', () => localStorage.clear())
+          ToastManager.toastAction('Come on! Do you want reset your account?', () => localStorage.clear())
           return false
         }
       }

@@ -103,10 +103,10 @@ export default class ListCtrl {
   }]
 
   //newKeyDialog
-  newKeyDialogCtrl = ['$scope', '$mdDialog','keyObj', ($scope, $mdDialog, keyObj) => {
+  newKeyDialogCtrl = ['$scope', '$mdDialog', '$rootScope' ,'keyObj', ($scope, $mdDialog, $rootScope, keyObj) => {
     $scope.keyObj = keyObj || {type:1}
 
-    console.log('open')
+    $scope.appHeight = $rootScope.appHeight
 
     $scope.cancel = () => {
       $mdDialog.cancel()
