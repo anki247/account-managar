@@ -1,9 +1,11 @@
+import AngularUtil from './AngularUtil'
+import DialogAddNewCtrl from './DialogAddNewCtrl'
+import DialogShowKeyCtrl from './DialogShowKeyCtrl'
+
 export default class ListCtrl {
   angular
-  mdDialog
   keyManager
   _scope
-  mdMedia
 
   constructor(app, _angular) {
     this.start(app)
@@ -11,13 +13,11 @@ export default class ListCtrl {
   }
 
   start = (app) => {
-    app.controller('listCtrl', ['$scope', '$mdDialog','$mdMedia','keyManager', ($scope, $mdDialog, $mdMedia, keyManager) => {
+    app.controller('listCtrl', ['$scope','keyManager', ($scope, keyManager) => {
       $scope.keySet = keyManager.keyObj
 
-      this.mdDialog = $mdDialog
       this.keyManager = keyManager
       this._scope = $scope
-      this.mdMedia = $mdMedia
 
       $scope.goToKey = this.goToKey
 
@@ -29,8 +29,8 @@ export default class ListCtrl {
   }
 
   goToKey = (key, data, ev) =>{
-    this.mdDialog.show({
-      controller: this.showKeyDialogCtrl,
+    AngularUtil.mdDialog.show({
+      controller: DialogShowKeyCtrl,
       templateUrl: 'showKeyDialog.html',
       parent: this.angular.element(document.body),
       targetEvent: ev,
@@ -62,15 +62,15 @@ export default class ListCtrl {
 
       this._scope.addNew(ev, keyObjDis)
     } else { 
-      //delete
+      //delete //TODO open confirm dialog
       this.keyManager.deleteSave(key)
     }
   }
 
   addNew = (ev, keyObj) => {
-    let useFullScreen = (this.mdMedia('sm') || this.mdMedia('xs'))
-    this.mdDialog.show({
-      controller: this.newKeyDialogCtrl,
+    let useFullScreen = (AngularUtil.mdMedia('sm') || AngularUtil.mdMedia('xs'))
+    AngularUtil.mdDialog.show({
+      controller: DialogAddNewCtrl,
       templateUrl: 'newKeyDialog.html',
       parent: this.angular.element(document.body),
       targetEvent: ev,
@@ -79,45 +79,8 @@ export default class ListCtrl {
         keyObj: keyObj
       }
     }).then( 
-      (keyObj) => { this.keyManager.encryptSave(keyObj) },
+      (keyObj) => { this.keyManager.encryptSave(keyObj)},
       () => { return }
     )
   }
-
-  //showKeyDialog
-  showKeyDialogCtrl = ['$scope', '$mdDialog', 'keyManager', 'key', 'data', ($scope, $mdDialog, keyManager, key, data) =>{
-    $scope.keyObjDis = {}
-    $scope.keyObjDis.title = key
-    $scope.keyObjDis.type = data.type
-    $scope.keyObjDis.created = data.created
-    if(data.type == 1) {
-      $scope.keyObjDis.user = keyManager.decrypt(data.created, data.user)
-      $scope.keyObjDis.pass = keyManager.decrypt(data.created, data.pass)
-    } else {
-      $scope.keyObjDis.text = keyManager.decrypt(data.created, data.text)
-    }
-
-    $scope.cancel = () => {
-      $mdDialog.cancel()
-    }
-  }]
-
-  //newKeyDialog
-  newKeyDialogCtrl = ['$scope', '$mdDialog', '$rootScope' ,'keyObj', ($scope, $mdDialog, $rootScope, keyObj) => {
-    $scope.keyObj = keyObj || {type:1}
-
-    $scope.appHeight = $rootScope.appHeight
-
-    $scope.cancel = () => {
-      $mdDialog.cancel()
-    }
-
-    $scope.save = () => {
-      $mdDialog.hide($scope.keyObj)
-    }
-  }]
-
-
-
-
 }

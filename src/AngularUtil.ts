@@ -5,6 +5,8 @@ class AngularUtil {
   injector
   angular
   mdToast
+  mdMedia
+  mdDialog
   constructor(_angular) {
     console.log('init AngularUtil')
     this.angular = _angular
@@ -59,8 +61,12 @@ class AngularUtil {
 
 
     //Factories
-    this.app.factory('keyManager', ['$mdToast', ($mdToast) => {
-      this.mdToast = $mdToast //f*cking injection
+    this.app.factory('keyManager', ['$mdToast', '$mdMedia', '$mdDialog', ($mdToast, $mdMedia, $mdDialog) => {
+      //f*cking injection
+      this.mdToast = $mdToast 
+      this.mdMedia = $mdMedia
+      this.mdDialog = $mdDialog
+      
       let keyManager
       if(!keyManager) {
         keyManager = new KeyManager()
