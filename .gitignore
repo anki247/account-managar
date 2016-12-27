@@ -73,14 +73,6 @@ Temporary Items
 .apdisk
 
 
-### CoffeeScript ###
-*.js
-
-
-### HTML Files ###
-*.html
-
-
 ### Application Cache ###
 *.appcache
 

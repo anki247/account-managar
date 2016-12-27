@@ -33,15 +33,15 @@ gulp.task('webpack', function() {
       output: {
         filename: 'bundle.js'
       },
-      console: true
-      /*plugins: [
+      console: true,
+      plugins: [
           new webpack.optimize.UglifyJsPlugin({
             minimize: true,
             compress: {
               drop_console: true
             }
           })
-        ]*/
+        ]
     }))
     .pipe(gulp.dest('js/bundle/'));
 });
