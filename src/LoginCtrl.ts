@@ -1,10 +1,12 @@
+import AngularUtil from './AngularUtil'
+
 export default class LoginCtrl {
-  constructor(app) {
-    this.start(app)
+  constructor() {
+    this.start()
   }
 
-  private start(app) {
-    app.controller('loginCtrl', ['$scope', '$location', '$rootScope', 'keyManager', ($scope, $location, $rootScope, keyManager) => {
+  private start() {
+    AngularUtil.app.controller('loginCtrl', ['$scope', '$location', '$rootScope', 'keyManager', ($scope, $location, $rootScope, keyManager) => {
       /*Navigation stop (maybe later)
       $rootScope.preventNavigation = false
       $rootScope.$on('$locationChangeStart', (event, newUrl, oldUrl) => {
@@ -15,6 +17,7 @@ export default class LoginCtrl {
 
       //global vars
       $rootScope.logged = false
+      //note the window height
       $rootScope.appHeight = window.outerHeight
 
       $scope.masterkey = ''

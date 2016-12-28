@@ -1,17 +1,19 @@
 import AngularUtil from './AngularUtil'
 
-export default ['$scope', 'keyManager', 'key', 'data', ($scope, keyManager, key, data) =>{
-    $scope.keyObjDis = {}
-    $scope.keyObjDis.title = key
-    $scope.keyObjDis.type = data.type
-    $scope.keyObjDis.created = data.created
+export default ['$scope', 'keyManager', 'key', 'data', ($scope, keyManager, key: string, data: KeyObjDataI) =>{
+    
+    let keyObjDis: PlainKeyObjI = {} as PlainKeyObjI
+    keyObjDis.title = key
+    keyObjDis.type = data.type
+    keyObjDis.created = data.created
     if(data.type == 1) {
-      $scope.keyObjDis.user = keyManager.decrypt(data.created, data.user)
-      $scope.keyObjDis.pass = keyManager.decrypt(data.created, data.pass)
+      keyObjDis.user = keyManager.decrypt(data.created, data.user)
+      keyObjDis.pass = keyManager.decrypt(data.created, data.pass)
     } else {
-      $scope.keyObjDis.text = keyManager.decrypt(data.created, data.text)
+      keyObjDis.text = keyManager.decrypt(data.created, data.text)
     }
 
+    $scope.keyObjDis = keyObjDis
     $scope.cancel = () => {
       AngularUtil.mdDialog.cancel()
     }

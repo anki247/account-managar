@@ -1,10 +1,16 @@
-import Application from './Application'
+import AngularUtil from './AngularUtil'
+import MainCtrl from './MainCtrl'
+import LoginCtrl from './LoginCtrl'
+import ListCtrl from './ListCtrl'
 
-((Application, angular) => {
+((angular) => {
   //start Application
-  new Application(angular)
+      //init Ctrl
+    new MainCtrl()
+    new LoginCtrl()
+    new ListCtrl()
 
   //bootstrap Angular
   angular.bootstrap(document, ['app'])
   
-})(Application, angular);
+})(angular);

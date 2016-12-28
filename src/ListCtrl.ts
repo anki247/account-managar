@@ -3,17 +3,15 @@ import DialogAddNewCtrl from './DialogAddNewCtrl'
 import DialogShowKeyCtrl from './DialogShowKeyCtrl'
 
 export default class ListCtrl {
-  angular
   keyManager
   _scope
 
-  constructor(app, _angular) {
-    this.start(app)
-    this.angular = _angular
+  constructor() {
+    this.start()
   }
 
-  start = (app) => {
-    app.controller('listCtrl', ['$scope','keyManager', ($scope, keyManager) => {
+  private start = () => {
+    AngularUtil.app.controller('listCtrl', ['$scope','keyManager', ($scope, keyManager) => {
       $scope.keySet = keyManager.keyObj
 
       this.keyManager = keyManager
@@ -28,11 +26,11 @@ export default class ListCtrl {
     }])
   }
 
-  goToKey = (key, data, ev) =>{
+  private goToKey = (key, data, ev) =>{
     AngularUtil.mdDialog.show({
       controller: DialogShowKeyCtrl,
       templateUrl: 'showKeyDialog.html',
-      parent: this.angular.element(document.body),
+      parent: AngularUtil.angular.element(document.body),
       targetEvent: ev,
       locals: {
         key: key,
@@ -44,10 +42,10 @@ export default class ListCtrl {
     )
   }
 
-  optionClick = (ev, index, key, data) => {
+  private optionClick = (ev, index, key: string, data: KeyObjDataI) => {
     if(index == 0) {
       //#Edit
-      let keyObjDis:any = {}
+      let keyObjDis: PlainKeyObjI = {} as PlainKeyObjI
       keyObjDis.title = key
       keyObjDis.type = data.type
       keyObjDis.created = data.created
@@ -67,19 +65,21 @@ export default class ListCtrl {
     }
   }
 
-  addNew = (ev, keyObj) => {
+  private addNew = (ev, keyObj: PlainKeyObjI) => {
     let useFullScreen = (AngularUtil.mdMedia('sm') || AngularUtil.mdMedia('xs'))
     AngularUtil.mdDialog.show({
       controller: DialogAddNewCtrl,
       templateUrl: 'newKeyDialog.html',
-      parent: this.angular.element(document.body),
+      parent: AngularUtil.angular.element(document.body),
       targetEvent: ev,
       fullscreen: useFullScreen,
       locals:{
         keyObj: keyObj
       }
     }).then( 
+      //hide ()
       (keyObj) => { this.keyManager.encryptSave(keyObj)},
+      //cancel()
       () => { return }
     )
   }

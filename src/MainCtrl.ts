@@ -1,16 +1,15 @@
+import AngularUtil from './AngularUtil'
 import ToastManager from './ToastManager'
 
 export default class MainCtrl {
-  _keyManager
-  _mdSidenav
 
-  constructor(app) {
+  constructor() {
     console.log('init MainCtrl')
-    this.start(app)
+    this.start()
   }
 
-  private start(app) {
-    app.controller('mainController', ['$scope', '$mdSidenav', 'keyManager', ($scope, $mdSidenav, keyManager) => {
+  private start() {
+    AngularUtil.app.controller('mainController', ['$scope', '$mdSidenav', 'keyManager', ($scope, $mdSidenav, keyManager) => {
 
       $scope.toggleSidenav = (menuId) => {
         $mdSidenav(menuId).toggle()
@@ -21,7 +20,6 @@ export default class MainCtrl {
          this.exportImpl(keyManager, $mdSidenav)
       }
        
-
       $scope.importKey = () => {document.getElementById('upload-btn').click()}
 
       //uplaoud TODO dom anpassen
@@ -34,7 +32,6 @@ export default class MainCtrl {
 
   private exportImpl(keyManager, mdSidenav) {
     console.log('--> Export')
-    console.log(keyManager)
     let keyObj = keyManager.keyObj
     let a = document.createElement('a')
     a.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(keyManager.encryptKeyObj()))
@@ -52,7 +49,7 @@ export default class MainCtrl {
     let input = event.target
     let reader = new FileReader()
     reader.onload = () => {
-      let importedKeyObj = JSON.parse(keyManager.decryptKeyObj(reader.result))
+      let importedKeyObj: KeyObjI = keyManager.decryptKeyObj(reader.result)
 
       console.log(importedKeyObj)
       //TODO merge keyObj
@@ -66,7 +63,7 @@ export default class MainCtrl {
     reader.readAsText(input.files[0])
   }
 
-  private mergeKeyObj(origKeyObj, importedKeyObj) {
+  private mergeKeyObj(origKeyObj: KeyObjI, importedKeyObj: KeyObjI) {
     console.log('mergeKeyObj')
     for(let title in importedKeyObj) {
       let body = importedKeyObj[title]
@@ -87,7 +84,7 @@ export default class MainCtrl {
     }
   }
 
-  private getNextAvailableTile(origKeyObj, title) {
+  private getNextAvailableTile(origKeyObj: KeyObjI, title) {
     let i = 1
     let exten = '('+i+')'
     while(origKeyObj[title + exten] !== undefined){

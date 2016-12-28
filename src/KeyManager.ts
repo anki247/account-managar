@@ -1,19 +1,21 @@
+///<reference path="./def/account-manager.d.ts" />
+
 import AesManager from './AesManager'
 import ToastManager from './ToastManager'
 
 export default function () {
-  let _masterKey
+  let _masterKey: string
   let aesManager
   let theBoss = 'theBoss'
   let _key = 'keyObj'
 
-  this.keyObj = Object.create(null)
+  this.keyObj = <KeyObjI> Object.create(null)
 
   this.start = () => {
     this.aesManager = new AesManager()
   }
 
-  this.setMasterKey = (masterKey) => {
+  this.setMasterKey = (masterKey: string) => {
     if(iCheck(masterKey)) {
       iSetMasterKey(masterKey)
       iLoadKeyFromLocalStorage()
@@ -26,15 +28,14 @@ export default function () {
       return tmp
   }
 
-  this.encryptKeyObj = ()  => {
+  this.encryptKeyObj = () : string => {
       return this.aesManager.encrypt(_masterKey, JSON.stringify(this.keyObj))
   }
 
-  this.encryptSave = (plainKeyObj:any)  => {
-    let tmpObj:any = {}
+  this.encryptSave = (plainKeyObj: PlainKeyObjI)  => {
     if(plainKeyObj == null || plainKeyObj.title == undefined ||  plainKeyObj.title.length == 0){
       ToastManager.toast('no title')
-    } else {
+      } else {
       if(!plainKeyObj.skip){
         if(this.keyObj[plainKeyObj.title] != undefined){
           ToastManager.toast('title exists!')
@@ -45,9 +46,10 @@ export default function () {
         iDelete(plainKeyObj.oldTitle)
       }
 
-      tmpObj.type =  parseInt(plainKeyObj.type)
+      let tmpObj: KeyObjDataI = {} as KeyObjDataI
+      tmpObj.type =  plainKeyObj.type
       tmpObj.created = new Date().getTime()
-      if(tmpObj.type == 1){
+      if(tmpObj.type === 1){
         tmpObj.user = this.aesManager.encrypt(_masterKey + tmpObj.created, plainKeyObj.user)
         tmpObj.pass = this.aesManager.encrypt(_masterKey + tmpObj.created, plainKeyObj.pass)
       } else {
@@ -58,7 +60,7 @@ export default function () {
     }
   }
 
-  this.deleteSave = (title)  => {
+  this.deleteSave = (title: string)  => {
     if(this.keyObj.hasOwnProperty(title)){
       delete this.keyObj[title]
       iSaveKey()
@@ -66,19 +68,19 @@ export default function () {
     }
   }
 
-  this.decrypt = (created, encText)  => {
+  this.decrypt = (created: number, encText: string) : string  => {
     return this.aesManager.decrypt(_masterKey + created, encText)
   }
 
-  this.decryptKeyObj = (encText)  => {
-    return this.aesManager.decrypt(_masterKey, encText)
+  this.decryptKeyObj = (encText: string) : KeyObjI  => {
+    return JSON.parse(this.aesManager.decrypt(_masterKey, encText))
   }
 
-  this.saveKey = ()  => {
+  this.saveKey = () : void => {
     iSaveKey()
   }
 
-  let iCheck = (masterKey) => {
+  let iCheck = (masterKey: string) : boolean => {
     if(masterKey && masterKey !== '' && masterKey.length > 4) {
       let loginPass = localStorage.getItem(theBoss)
       if(loginPass === null) {
@@ -104,11 +106,11 @@ export default function () {
     }
   }
 
-  let iSetMasterKey = (masterKey) => {
+  let iSetMasterKey = (masterKey: string) : void => {
     _masterKey = masterKey
   }
 
-  let iSaveKey = () => {
+  let iSaveKey = () : void => {
     localStorage.setItem(_key, JSON.stringify(this.keyObj))
   }
 
@@ -121,7 +123,7 @@ export default function () {
     }
   }
 
-  let iDelete = (title) => {
+  let iDelete = (title: string) => {
     if(this.keyObj.hasOwnProperty(title)) {
       delete this.keyObj[title]
     }

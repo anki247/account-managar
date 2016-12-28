@@ -2,7 +2,6 @@ import KeyManager from './KeyManager'
 
 class AngularUtil {
   app
-  injector
   angular
   mdToast
   mdMedia
@@ -10,7 +9,6 @@ class AngularUtil {
   constructor(_angular) {
     console.log('init AngularUtil')
     this.angular = _angular
-    this.injector = _angular.injector()
     this.start()
     
   }
